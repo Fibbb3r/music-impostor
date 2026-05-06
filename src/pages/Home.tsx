@@ -22,7 +22,7 @@ export default function Home() {
     
     try {
       // Find or create global room
-      let { data: roomData, error: roomError } = await supabase
+      let { data: roomData } = await supabase
         .from('rooms')
         .select('*')
         .eq('code', GLOBAL_ROOM_CODE)
@@ -85,9 +85,10 @@ export default function Home() {
       localStorage.setItem('playerId', playerId);
       
       navigate(`/room/${GLOBAL_ROOM_CODE}`);
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
-      setError(err.message || 'Błąd podczas dołączania.');
+      const e = err as { message?: string };
+      setError(e.message || 'Błąd podczas dołączania.');
     } finally {
       setIsJoining(false);
     }
